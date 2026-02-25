@@ -1,0 +1,16 @@
+target/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+*.tar.gz
+*.log
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project

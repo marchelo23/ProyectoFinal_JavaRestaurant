@@ -1,0 +1,219 @@
+
+classDiagram
+    %% Base Classes
+    class Person {
+        -String id
+        -String name
+        -String phone
+        +Person()
+        +Person(id, name, phone)
+        +getId() String
+        +getName() String
+        +getPhone() String
+        +setId(id) void
+        +setName(name) void
+        +setPhone(phone) void
+        +toString() String
+    }
+
+    %% Inheritance: Waiter extends Person
+    class Waiter {
+        -String employeeId
+        +Waiter()
+        +Waiter(id, name, phone, employeeId)
+        +getEmployeeId() String
+        +setEmployeeId(employeeId) void
+        +toString() String
+    }
+    
+    Person <|-- Waiter : extends
+
+    %% Abstract MenuItem class
+    class MenuItem {
+        <<abstract>>
+        -String id
+        -String name
+        -double price
+        -String category
+        +MenuItem()
+        +MenuItem(id, name, price, category)
+        +calculateTotal(quantity)* double
+        +getId() String
+        +getName() String
+        +getPrice() double
+        +getCategory() String
+        +toString() String
+    }
+
+    %% Concrete implementations of MenuItem
+    class FoodItem {
+        -int preparationTime
+        +FoodItem()
+        +FoodItem(id, name, price, category, preparationTime)
+        +calculateTotal(quantity) double
+        +getPreparationTime() int
+        +setPreparationTime(time) void
+        +toString() String
+    }
+
+    class DrinkItem {
+        -String size
+        +DrinkItem()
+        +DrinkItem(id, name, price, category, size)
+        +calculateTotal(quantity) double
+        +getSize() String
+        +setSize(size) void
+        +toString() String
+    }
+
+    MenuItem <|-- FoodItem : extends
+    MenuItem <|-- DrinkItem : extends
+
+    %% Table class
+    class Table {
+        -int tableNumber
+        -int capacity
+        -boolean isOccupied
+        +Table()
+        +Table(tableNumber, capacity)
+        +occupy() void
+        +free() void
+        +getTableNumber() int
+        +getCapacity() int
+        +isOccupied() boolean
+        +setOccupied(occupied) void
+        +toString() String
+    }
+
+    %% OrderStatus Enum
+    class OrderStatus {
+        <<enumeration>>
+        PENDING
+        PAID
+        -String value
+        +getValue() String
+        +toString() String
+    }
+
+    %% Order class with composition
+    class Order {
+        -String orderId
+        -int tableNumber
+        -String waiterId
+        -List~OrderItem~ items
+        -OrderStatus status
+        -double taxRate
+        -String createdAt
+        -String paidAt
+        +Order()
+        +Order(orderId, tableNumber, waiterId)
+        +addItem(menuItem, quantity) void
+        +calculateSubtotal() double
+        +calculateTax() double
+        +calculateTotal() double
+        +markAsPaid() void
+        +getOrderId() String
+        +getTableNumber() int
+        +getWaiterId() String
+        +getItems() List~OrderItem~
+        +getStatus() OrderStatus
+        +toString() String
+    }
+
+    %% Inner class OrderItem
+    class OrderItem {
+        <<inner class>>
+        -MenuItem item
+        -int quantity
+        +OrderItem()
+        +OrderItem(item, quantity)
+        +getItem() MenuItem
+        +getQuantity() int
+        +setItem(item) void
+        +setQuantity(quantity) void
+    }
+
+    Order ..> OrderStatus : uses
+    Order "1" *-- "0..*" OrderItem : contains
+    OrderItem "1" *-- "1" MenuItem : contains
+    Order --> Table : references
+    Order --> Waiter : references
+
+    %% Service Layer
+    class FileStorage {
+        -String dataDir
+        -Gson gson
+        +FileStorage(dataDir)
+        +saveTables(tables) void
+        +loadTables() List~Table~
+        +saveWaiters(waiters) void
+        +loadWaiters() List~Waiter~
+        +saveMenuItems(menuItems) void
+        +loadMenuItems() List~MenuItem~
+        +saveOrders(orders) void
+        +loadOrders() List~Order~
+    }
+
+    class RestaurantManager {
+        -FileStorage storage
+        -List~Table~ tables
+        -List~Waiter~ waiters
+        -List~MenuItem~ menuItems
+        -List~Order~ orders
+        +RestaurantManager()
+        +RestaurantManager(dataDir)
+        +loadAllData() void
+        +saveAllData() void
+        +addTable(tableNumber, capacity) Table
+        +getTable(tableNumber) Table
+        +listTables() List~Table~
+        +addWaiter(id, name, phone, employeeId) Waiter
+        +getWaiter(id) Waiter
+        +listWaiters() List~Waiter~
+        +addFoodItem(...) FoodItem
+        +addDrinkItem(...) DrinkItem
+        +getMenuItem(id) MenuItem
+        +listMenuItems() List~MenuItem~
+        +createOrder(orderId, tableNumber, waiterId) Order
+        +getOrder(orderId) Order
+        +listOrders() List~Order~
+        +addItemToOrder(orderId, itemId, quantity) void
+        +payOrder(orderId) void
+        +getPendingOrders() List~Order~
+        +getPaidOrders() List~Order~
+    }
+
+    class ReportService {
+        -RestaurantManager manager
+        +ReportService(manager)
+        +generateDailySalesReport(date) DailySalesReport
+        +getSalesByWaiter(date) Map~String,WaiterSales~
+        +getPopularItems(date) List~PopularItem~
+    }
+
+    class Main {
+        -Scanner scanner
+        -RestaurantManager manager
+        -ReportService reportService
+        +main(args) void$
+        +mainMenu() void$
+        +adminMenu() void$
+        +waiterMenu() void$
+        +cashierMenu() void$
+        +reportsMenu() void$
+    }
+
+    RestaurantManager --> FileStorage : uses
+    RestaurantManager "1" o-- "0..*" Table : manages
+    RestaurantManager "1" o-- "0..*" Waiter : manages
+    RestaurantManager "1" o-- "0..*" MenuItem : manages
+    RestaurantManager "1" o-- "0..*" Order : manages
+    ReportService --> RestaurantManager : uses
+    Main --> RestaurantManager : uses
+    Main --> ReportService : uses
+
+    %% Notes
+    note for MenuItem "Clase abstracta\ndefine interfaz\npara items del menú"
+    note for Order "Composición: contiene\nOrderItem que a su vez\ncontiene MenuItem"
+    note for OrderStatus "Enumerador para\nestados del pedido"
+
