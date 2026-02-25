@@ -2,17 +2,30 @@
 
 ## 🚀 Iniciar el Sistema
 
+**En Linux / Mac:**
 ```bash
 cd /home/chelo/POO/ProyectoFinal
 ./run.sh
 ```
 
+**En Windows:**
+```cmd
+cd ruta\hacia\ProyectoFinal
+java -cp "bin;lib/gson-2.10.1.jar" com.restaurant.Main
+```
+
 ## 📦 Compilar (si es necesario)
 
+**En Linux / Mac:**
 ```bash
 javac -cp "lib/gson-2.10.1.jar" -d bin -sourcepath src/main/java \
   src/main/java/com/restaurant/**/*.java \
   src/main/java/com/restaurant/*.java
+```
+
+**En Windows:**
+```cmd
+javac -cp "lib/gson-2.10.1.jar" -d bin -sourcepath src/main/java src/main/java/com/restaurant/**/*.java src/main/java/com/restaurant/*.java
 ```
 
 ## 📂 Estructura del Proyecto
@@ -105,9 +118,16 @@ ls -lh lib/gson-2.10.1.jar
 Ya resuelto - agregado `import com.google.gson.internal.Streams`
 
 ### Error: "ClassNotFoundException: com.restaurant.Main"
+**En Linux/Mac:**
 ```bash
 # Verificar classpath al ejecutar
 java -cp "bin:lib/gson-2.10.1.jar" com.restaurant.Main
+```
+
+**En Windows:**
+*(Nota: En Windows se usa punto y coma `;` en lugar de dos puntos `:`)*
+```cmd
+java -cp "bin;lib/gson-2.10.1.jar" com.restaurant.Main
 ```
 
 ### Los datos no se guardan

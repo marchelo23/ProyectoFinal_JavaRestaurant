@@ -108,16 +108,30 @@ public class Order {
 
 ### Compilar el Proyecto
 
+**En Linux / Mac:**
 ```bash
+# Compilar todas las clases
+javac -cp "lib/gson-2.10.1.jar" -d bin -sourcepath src/main/java src/main/java/com/restaurant/**/*.java src/main/java/com/restaurant/*.java
+```
+
+**En Windows:**
+```cmd
 # Compilar todas las clases
 javac -cp "lib/gson-2.10.1.jar" -d bin -sourcepath src/main/java src/main/java/com/restaurant/**/*.java src/main/java/com/restaurant/*.java
 ```
 
 ### Ejecutar el Sistema
 
+**En Linux / Mac:**
 ```bash
 # Ejecutar la aplicación principal
 java -cp "bin:lib/gson-2.10.1.jar" com.restaurant.Main
+```
+
+**En Windows:**
+```cmd
+# Ejecutar la aplicación principal (Nota el punto y coma)
+java -cp "bin;lib/gson-2.10.1.jar" com.restaurant.Main
 ```
 
 ### Script de Ejecución Rápida
