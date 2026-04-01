@@ -139,6 +139,22 @@ public class Main {
         pause();
     }
 
+    private static void viewPendingOrdersByTable() {
+        printHeader("CONSULTAR PEDIDOS POR MESA");
+        int tableNumber = readInt("Número de mesa: ");
+        List<Order> pending = manager.getPendingOrdersByTable(tableNumber);
+
+        if (pending.isEmpty()) {
+            System.out.println("No hay pedidos activos para la mesa " + tableNumber + ".");
+        } else {
+            System.out.println("Pedidos activos para la mesa " + tableNumber + ":");
+            for (Order order : pending) {
+                System.out.println("  • " + order);
+            }
+        }
+        pause();
+    }
+
     private static void listTables() {
         printHeader("LISTADO DE MESAS");
         List<Table> tables = manager.listTables();
@@ -267,7 +283,8 @@ public class Main {
                     "Crear Pedido",
                     "Agregar Items a Pedido",
                     "Ver Pedidos Pendientes",
-                    "Ver Detalle de Pedido"
+                    "Ver Detalle de Pedido",
+                    "Consultar Pedidos por Mesa"
             });
 
             int choice = readInt("Seleccione una opción: ");
@@ -284,6 +301,9 @@ public class Main {
                     break;
                 case 4:
                     viewOrderDetail();
+                    break;
+                case 5:
+                    viewPendingOrdersByTable();
                     break;
                 case 0:
                     return;
@@ -416,6 +436,7 @@ public class Main {
             printMenu("MENÚ CAJERO", new String[] {
                     "Registrar Pago de Pedido",
                     "Ver Pedidos Pendientes de Pago",
+                    "Consultar Pedidos por Mesa",
                     "Ver Pedidos Pagados Hoy"
             });
 
@@ -429,6 +450,9 @@ public class Main {
                     viewPendingOrders();
                     break;
                 case 3:
+                    viewPendingOrdersByTable();
+                    break;
+                case 4:
                     viewPaidOrdersToday();
                     break;
                 case 0:
