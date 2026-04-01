@@ -239,6 +239,16 @@ public class RestaurantManager {
         return pending;
     }
 
+    public List<Order> getPendingOrdersByTable(int tableNumber) {
+        List<Order> pendingByTable = new ArrayList<>();
+        for (Order order : orders) {
+            if (order.getStatus() == OrderStatus.PENDING && order.getTableNumber() == tableNumber) {
+                pendingByTable.add(order);
+            }
+        }
+        return pendingByTable;
+    }
+
     public List<Order> getPaidOrders() {
         List<Order> paid = new ArrayList<>();
         for (Order order : orders) {
